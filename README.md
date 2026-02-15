@@ -7,7 +7,7 @@ This system generates image embeddings and compares them using cosine similarity
 ---
 
 ## 🌐 Live Demo
-Live Application: https://visual-product-matcher-3p2tko6vy-pujas-projects-1c4dc216.vercel.app
+Live Application: https://visual-product-matcher-3p2tko6vy-pujas-projects-1c4dc216.vercel.app/
 Backend API: https://visual-product-matcher-backend-o2m9.onrender.com  
 
 ## 🚀 Features
