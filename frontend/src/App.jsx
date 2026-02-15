@@ -144,7 +144,7 @@ const handleSearch = async () => {
         }}
       >
         <img
-  src={`https://visual-product-matcher-backend-o2m9.onrender.com/${product.image}`}
+  src={`https://visual-product-matcher-backend-o2m9.onrender.com${product.image}`}
   style={{ width: "100%", borderRadius: "8px" }}
   alt={product.name}
 />
