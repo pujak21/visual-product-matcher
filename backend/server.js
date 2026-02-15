@@ -6,6 +6,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
+const path = require("path");
+
 const generateEmbedding = require("./utils/embedding");
 const cosineSimilarity = require("./utils/similarity");
 const products = require("./products.json");
@@ -23,7 +25,9 @@ app.use(express.json());
 //app.use("/images", express.static("images"));
 
 
-app.use("/images", express.static("images"));
+//app.use("/images", express.static("images"));
+
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 
 app.get("/", (req, res) => {
@@ -144,7 +148,7 @@ app.post("/search-file", upload.single("image"), async (req, res) => {
 
 
 
-const PORT = process.env.PORT || 5000;
+//const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
