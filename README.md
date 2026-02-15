@@ -6,6 +6,10 @@ This system generates image embeddings and compares them using cosine similarity
 
 ---
 
+## 🌐 Live Demo
+Frontend: https://your-frontend-link.vercel.app  
+Backend API: https://visual-product-matcher-backend-o2m9.onrender.com  
+
 ## 🚀 Features
 
 - 🔍 Search using Image URL
