@@ -24,7 +24,7 @@ const handleSearch = async () => {
       formData.append("image", file);
 
       response = await axios.post(
-        "http://localhost:5000/search-file",
+        "https://visual-product-matcher-backend-o2m9.onrender.com/search-file",
         formData,
         {
           headers: {
@@ -38,7 +38,7 @@ const handleSearch = async () => {
   setPreviewImage(imageUrl);
 
   response = await axios.post(
-    "http://localhost:5000/search",
+    "https://visual-product-matcher-backend-o2m9.onrender.com/search",
     { imageUrl }
   );
 }
@@ -144,7 +144,7 @@ const handleSearch = async () => {
         }}
       >
         <img
-  src={`http://localhost:5000${product.image}`}
+  src={`https://visual-product-matcher-backend-o2m9.onrender.com/${product.image}`}
   style={{ width: "100%", borderRadius: "8px" }}
   alt={product.name}
 />
