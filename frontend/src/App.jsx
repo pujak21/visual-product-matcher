@@ -6,30 +6,78 @@ function App() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [threshold, setThreshold] = useState(0);
+  const [file, setFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
 
-  const handleSearch = async () => {
-    if (!imageUrl) return alert("Please enter image URL");
 
-    try {
-      setLoading(true);
 
-      const response = await axios.post(
-        "http://localhost:5000/search",
-        { imageUrl }
+const handleSearch = async () => {
+  try {
+    setLoading(true);
+
+    let response;
+
+    // If user uploaded a file
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      response = await axios.post(
+        "http://localhost:5000/search-file",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        }
       );
+    } 
+    // If user entered URL
+   else if (imageUrl) {
+  setPreviewImage(imageUrl);
 
-      setResults(response.data);
-    } catch (error) {
-      alert("Search failed");
-    } finally {
-      setLoading(false);
+  response = await axios.post(
+    "http://localhost:5000/search",
+    { imageUrl }
+  );
+}
+
+    else {
+      alert("Please upload a file or enter image URL");
+      return;
     }
-  };
+
+    setResults(response.data);
+
+  } catch (err) {
+    console.error(err);
+    alert("Search failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div style={{ padding: "40px", fontFamily: "Arial" }}>
       <h1>Visual Product Matcher</h1>
+
+ <input
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+
+    if (selectedFile) {
+      const imageUrl = URL.createObjectURL(selectedFile);
+      setPreviewImage(imageUrl);
+    }
+  }}
+/>
+
+
 
       <input
         type="text"
@@ -46,16 +94,17 @@ function App() {
         Search
       </button>
 
-      {imageUrl && (
-  <div style={{ marginTop: "20px" }}>
+  {previewImage && (
+  <div>
     <h3>Uploaded Image</h3>
     <img
-      src={imageUrl}
+      src={previewImage}
       alt="Uploaded"
-      style={{ width: "200px", borderRadius: "8px" }}
+      style={{ width: "200px", borderRadius: "10px" }}
     />
   </div>
 )}
+
 
 
       <div style={{ marginTop: "20px" }}>
@@ -95,9 +144,11 @@ function App() {
         }}
       >
         <img
-          src={product.image}
-          style={{ width: "100%", borderRadius: "8px" }}
-        />
+  src={`http://localhost:5000${product.image}`}
+  style={{ width: "100%", borderRadius: "8px" }}
+  alt={product.name}
+/>
+
         <h3>{product.name}</h3>
         <p>Category: {product.category}</p>
         <p>Similarity: {product.similarity.toFixed(2)}</p>

@@ -1,32 +1,46 @@
-require("dotenv").config();
-
 const fs = require("fs");
 const path = require("path");
 const generateEmbedding = require("./utils/embedding");
 
-const productsPath = path.join(__dirname, "products.json");
-
-async function updateEmbeddings() {
+async function generateProducts() {
   try {
-    const products = JSON.parse(fs.readFileSync(productsPath, "utf-8"));
+    const imagesDir = path.join(__dirname, "images");
+    const imageFiles = fs.readdirSync(imagesDir);
 
-    for (let product of products) {
-      console.log(`Generating embedding for: ${product.name}`);
+    const products = [];
 
-      const embedding = await generateEmbedding(product.image);
+    let id = 1;
 
-      product.embedding = embedding;
+    for (const file of imageFiles) {
+      const imagePath = `/images/${file}`;
+      const fullPath = path.join(imagesDir, file);
 
-      console.log(`Done: ${product.name}`);
+      console.log(`Generating embedding for: ${file}`);
+
+      const embedding = await generateEmbedding(fullPath);
+
+      products.push({
+        id,
+        name: `Product ${id}`,
+        category: "General",
+        image: imagePath,
+        embedding
+      });
+
+      console.log(`Done: Product ${id}`);
+      id++;
     }
 
-    fs.writeFileSync(productsPath, JSON.stringify(products, null, 2));
+    fs.writeFileSync(
+      path.join(__dirname, "products.json"),
+      JSON.stringify(products, null, 2)
+    );
 
-    console.log("All embeddings updated successfully 🚀");
+    console.log("✅ All 50 products generated successfully!");
 
   } catch (error) {
-    console.error("Error generating embeddings:", error);
+    console.error("Error generating products:", error.message);
   }
 }
 
-updateEmbeddings();
+generateProducts();

@@ -10,11 +10,21 @@ const generateEmbedding = require("./utils/embedding");
 const cosineSimilarity = require("./utils/similarity");
 const products = require("./products.json");
 
+const multer = require("multer");
+const upload = multer();
+
+
 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+//app.use("/images", express.static("images"));
+
+
+app.use("/images", express.static("images"));
+
 
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
@@ -84,6 +94,53 @@ app.post("/search", async (req, res) => {
     res.status(500).json({ error: "Search failed" });
   }
 });
+
+app.post("/search-file", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const sharp = require("sharp");
+
+    const imageBuffer = req.file.buffer;
+
+    const resizedImage = await sharp(imageBuffer)
+      .resize(32, 32)
+      .raw()
+      .toBuffer();
+
+    const pixels = Array.from(resizedImage);
+    const normalized = pixels.map((v) => v / 255);
+
+    const queryEmbedding = normalized;
+
+    // 👇 USE SAME PRODUCTS AS ABOVE
+    const results = products.map(product => {
+      const similarity = cosineSimilarity(
+        queryEmbedding,
+        product.embedding
+      );
+
+      return {
+        id: product.id,
+        name: product.name,
+        category: product.category,
+        image: product.image,
+        similarity
+      };
+    });
+
+    results.sort((a, b) => b.similarity - a.similarity);
+
+    res.json(results.slice(0, 5));
+
+  } catch (err) {
+    console.error("File search error:", err);
+    res.status(500).json({ error: "File search failed" });
+  }
+});
+
 
 
 

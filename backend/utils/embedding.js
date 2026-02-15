@@ -1,31 +1,41 @@
-const Replicate = require("replicate");
+const sharp = require("sharp");
+const fs = require("fs");
+const axios = require("axios");
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN,
-});
-
-// This is a working CLIP embedding model on Replicate
-const MODEL = "krthr/clip-embeddings";
-
-async function generateEmbedding(imageUrl) {
+async function generateEmbedding(input) {
   try {
-    console.log("Generating embedding for:", imageUrl);
+    let imageBuffer;
 
-    const output = await replicate.run(
-      MODEL,
-      {
-        input: {
-          image: imageUrl
-        }
-      }
-    );
+    // If input is URL
+    if (input.startsWith("http")) {
+      console.log("Processing URL:", input);
 
-    // This model returns embedding inside output.embedding
-    return output.embedding;
+      const response = await axios.get(input, {
+        responseType: "arraybuffer",
+      });
+
+      imageBuffer = Buffer.from(response.data);
+    } 
+    // If input is local file path
+    else {
+      console.log("Processing local file:", input);
+      imageBuffer = fs.readFileSync(input);
+    }
+
+    const resizedImage = await sharp(imageBuffer)
+      .resize(32, 32)
+      .raw()
+      .toBuffer();
+
+    const pixels = Array.from(resizedImage);
+
+    const normalized = pixels.map((value) => value / 255);
+
+    return normalized;
 
   } catch (error) {
-    console.error("Replicate embedding error:", error);
-    throw new Error("Failed to generate embedding");
+    console.error("Image processing error:", error.message);
+    throw new Error("Failed to process image");
   }
 }
 
