@@ -197,7 +197,3 @@ This project demonstrates:
 - Real-time visual search logic
 
 It serves as a scalable foundation for building a production-grade visual search system.
-
----
-
-👩‍💻 Developed as part of a Visual Product Matching Assessment.
