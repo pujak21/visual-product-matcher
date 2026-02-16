@@ -98,23 +98,24 @@ visual-product-matcher/
 ### 1️⃣ Backend Setup
 
 cd backend
+
 npm install
+
 node generateProductEmbeddings.js
+
 node server.js
 
-Backend runs at:
-http://localhost:5000
 
 ---
 
 ### 2️⃣ Frontend Setup
 
 cd frontend
+
 npm install
+
 npm run dev
 
-Frontend runs at:
-http://localhost:5173
 
 
 ---
