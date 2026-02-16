@@ -24,9 +24,6 @@ app.use(express.json());
 
 //app.use("/images", express.static("images"));
 
-
-//app.use("/images", express.static("images"));
-
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 
@@ -68,10 +65,10 @@ app.post("/search", async (req, res) => {
       return res.status(400).json({ error: "Image URL required" });
     }
 
-    // 1️⃣ Generate embedding for uploaded image
+    //Generate embedding for uploaded image
     const queryEmbedding = await generateEmbedding(imageUrl);
 
-    // 2️⃣ Compare with each product
+    //Compare with each product
     const results = products.map(product => {
       const similarity = cosineSimilarity(
         queryEmbedding,
@@ -87,10 +84,10 @@ app.post("/search", async (req, res) => {
       };
     });
 
-    // 3️⃣ Sort by similarity (highest first)
+    // Sort by similarity (highest first)
     results.sort((a, b) => b.similarity - a.similarity);
 
-    // 4️⃣ Return top 5 matches
+    // Return top 5 matches
     res.json(results.slice(0, 5));
 
   } catch (error) {
@@ -119,7 +116,7 @@ app.post("/search-file", upload.single("image"), async (req, res) => {
 
     const queryEmbedding = normalized;
 
-    // 👇 USE SAME PRODUCTS AS ABOVE
+    // USE SAME PRODUCTS AS ABOVE
     const results = products.map(product => {
       const similarity = cosineSimilarity(
         queryEmbedding,
