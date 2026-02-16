@@ -11,6 +11,22 @@ Live Application: https://visual-product-matcher-3p2tko6vy-pujas-projects-1c4dc2
 
 Backend API: https://visual-product-matcher-backend-o2m9.onrender.com  
 
+
+## Approach
+
+This project implements a simple visual similarity search system using image embeddings and cosine similarity.
+
+When a user uploads an image (via file or URL), the backend processes the image using Sharp to resize it to a fixed 32x32 resolution and converts pixel data into a normalized embedding vector. Each product in the dataset has a pre-generated embedding stored in `products.json`.
+
+To find similar products, cosine similarity is calculated between the uploaded image embedding and each stored product embedding. Results are sorted in descending order based on similarity score and returned to the frontend.
+
+The frontend displays the uploaded image along with visually similar products. A similarity threshold slider allows users to filter results dynamically for better control.
+
+The backend is built with Node.js and Express, while the frontend uses React. The application is deployed using Render (backend) and Vercel (frontend), fulfilling the requirement for free hosting.
+
+This implementation focuses on simplicity, clarity, and production-ready structure while keeping computation efficient and lightweight.
+
+
 ## 🚀 Features
 
 - 🔍 Search using Image URL
