@@ -73,20 +73,35 @@ This implementation focuses on simplicity, clarity, and production-ready structu
 ## 📂 Project Structure
 
 visual-product-matcher/
+
 │
+
 ├── backend/
+
 │ ├── images/ → Product images
+
 │ ├── products.json → Product metadata + embeddings
+
 │ ├── utils/
+
 │ │ ├── embedding.js → Image embedding generator
+
 │ │ ├── similarity.js → Cosine similarity logic
+
 │ ├── generateProductEmbeddings.js
+
 │ └── server.js
+
 │
+
 ├── frontend/
+
 │ └── src/
+
 │ └── App.jsx
+
 │
+
 └── README.md
 
 
