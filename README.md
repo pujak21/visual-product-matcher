@@ -70,6 +70,7 @@ This implementation focuses on simplicity, clarity, and production-ready structu
 
 ---
 
+
 ## 📂 Project Structure
 
 visual-product-matcher/
